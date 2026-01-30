@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppTest {
     @Test
     void testApp() {
+        // Простейший тест чтобы всё компилировалось
         assertTrue(true);
     }
 }

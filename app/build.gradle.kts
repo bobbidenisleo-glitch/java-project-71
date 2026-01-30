@@ -24,6 +24,12 @@ dependencies {
     implementation("info.picocli:picocli:4.7.5")
     annotationProcessor("info.picocli:picocli-codegen:4.7.5")
     
+    // Jackson для JSON
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+    
+    // Jackson для YAML
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0")
+    
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -41,7 +47,6 @@ tasks.test {
     }
 }
 
-// Создание исполняемого JAR
 tasks.jar {
     manifest {
         attributes["Main-Class"] = "hexlet.code.App"
