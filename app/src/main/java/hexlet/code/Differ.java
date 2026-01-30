@@ -1,5 +1,10 @@
 package hexlet.code;
 
+import hexlet.code.formatters.Formatter;
+import hexlet.code.formatters.StylishFormatter;
+import hexlet.code.model.DiffNode;
+
+import java.util.List;
 import java.util.Map;
 
 public class Differ {
@@ -13,37 +18,24 @@ public class Differ {
         Map<String, Object> data1 = Parser.parse(filePath1);
         Map<String, Object> data2 = Parser.parse(filePath2);
         
-        // TODO: Реализовать сравнение и форматирование
-        return formatDiff(data1, data2, format);
+        // Сравниваем данные
+        List<DiffNode> diff = Comparator.compare(data1, data2);
+        
+        // Форматируем результат
+        Formatter formatter = getFormatter(format);
+        return formatter.format(diff);
     }
     
-    private static String formatDiff(Map<String, Object> data1, 
-                                    Map<String, Object> data2, 
-                                    String format) {
-        // Временная реализация - просто покажем что прочитали
-        StringBuilder result = new StringBuilder();
-        result.append("File 1 data: ").append(data1).append("\n");
-        result.append("File 2 data: ").append(data2).append("\n");
-        result.append("Format: ").append(format).append("\n");
-        
-        // Простое сравнение для теста
-        result.append("\nSimple comparison:\n");
-        for (String key : data1.keySet()) {
-            if (!data2.containsKey(key)) {
-                result.append("- ").append(key).append(": ").append(data1.get(key)).append("\n");
-            } else if (!data1.get(key).equals(data2.get(key))) {
-                result.append("~ ").append(key).append(": ").append(data1.get(key))
-                      .append(" -> ").append(data2.get(key)).append("\n");
-            } else {
-                result.append("  ").append(key).append(": ").append(data1.get(key)).append("\n");
-            }
+    private static Formatter getFormatter(String format) {
+        switch (format.toLowerCase()) {
+            case "stylish":
+                return new StylishFormatter();
+            case "plain":
+            case "json":
+            default:
+                // Пока только stylish поддерживается
+                throw new IllegalArgumentException("Unsupported format: " + format + 
+                                                  ". Only 'stylish' is supported for now.");
         }
-        for (String key : data2.keySet()) {
-            if (!data1.containsKey(key)) {
-                result.append("+ ").append(key).append(": ").append(data2.get(key)).append("\n");
-            }
-        }
-        
-        return result.toString();
     }
 }
