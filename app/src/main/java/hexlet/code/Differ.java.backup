@@ -1,37 +1,119 @@
 package hexlet.code;
 
 import hexlet.code.formatters.Formatter;
-import hexlet.code.formatters.StylishFormatter;
 import hexlet.code.model.DiffNode;
+import hexlet.code.parsers.Parser;
+import hexlet.code.parsers.JsonParser;
+import hexlet.code.parsers.YamlParser;
+import hexlet.code.model.DiffType;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 public class Differ {
     
-    public static String generate(String filePath1, String filePath2) throws Exception {
+    public static String generate(String filePath1, String filePath2) throws IOException {
         return generate(filePath1, filePath2, "stylish");
     }
     
-    public static String generate(String filePath1, String filePath2, String format) throws Exception {
-        // Читаем и парсим оба файла
-        Map<String, Object> data1 = Parser.parse(filePath1);
-        Map<String, Object> data2 = Parser.parse(filePath2);
+    public static String generate(String filePath1, String filePath2, String format) throws IOException {
+        Map<String, Object> data1 = parseFile(filePath1);
+        Map<String, Object> data2 = parseFile(filePath2);
         
-        // Сравниваем данные
-        List<DiffNode> diff = Comparator.compare(data1, data2);
-        
-        // Форматируем результат
+        List<DiffNode> diffNodes = compareMaps(data1, data2);
         Formatter formatter = getFormatter(format);
-        return formatter.format(diff);
+        
+        return formatter.format(diffNodes);
+    }
+    
+    private static Map<String, Object> parseFile(String filePath) throws IOException {
+        try {
+            String content = Files.readString(Path.of(filePath));
+            String extension = getFileExtension(filePath);
+            
+            // Обработка пустых файлов
+            if (content == null || content.trim().isEmpty() || 
+                content.trim().equals("{}") || content.trim().equals("---")) {
+                return java.util.Collections.emptyMap();
+            }
+            
+            Parser parser = getParser(extension);
+            return parser.parse(content);
+        } catch (Exception e) {
+            throw new IOException("Error parsing file: " + filePath, e);
+        }
+    }
+    
+    private static String getFileExtension(String filePath) {
+        int dotIndex = filePath.lastIndexOf('.');
+        return dotIndex > 0 ? filePath.substring(dotIndex + 1).toLowerCase() : "";
+    }
+    
+    private static Parser getParser(String extension) {
+        return switch (extension) {
+            case "json" -> new JsonParser();
+            case "yaml", "yml" -> new YamlParser();
+            default -> throw new IllegalArgumentException("Unsupported file format: " + extension);
+        };
+    }
+    
+    private static List<DiffNode> compareMaps(Map<String, Object> map1, Map<String, Object> map2) {
+        List<DiffNode> result = new ArrayList<>();
+        
+        // Обработка null мапов
+        map1 = map1 != null ? map1 : java.util.Collections.emptyMap();
+        map2 = map2 != null ? map2 : java.util.Collections.emptyMap();
+        
+        var allKeys = new TreeSet<String>();
+        allKeys.addAll(map1.keySet());
+        allKeys.addAll(map2.keySet());
+        
+        for (String key : allKeys) {
+            Object value1 = map1.get(key);
+            Object value2 = map2.get(key);
+            
+            DiffType type;
+            if (!map1.containsKey(key)) {
+                type = DiffType.ADDED;
+            } else if (!map2.containsKey(key)) {
+                type = DiffType.REMOVED;
+            } else if (isEqual(value1, value2)) {
+                type = DiffType.UNCHANGED;
+            } else {
+                type = DiffType.CHANGED;
+            }
+            
+            result.add(new DiffNode(key, type, value1, value2));
+        }
+        
+        return result;
+    }
+    
+    private static boolean isEqual(Object obj1, Object obj2) {
+        if (obj1 == null && obj2 == null) {
+            return true;
+        }
+        if (obj1 == null || obj2 == null) {
+            return false;
+        }
+        
+        // Для вложенных структур используем сравнение через toString
+        return obj1.toString().equals(obj2.toString());
     }
     
     private static Formatter getFormatter(String format) {
-    return switch (format) {
-        case "stylish" -> new StylishFormatter();
-        case "plain" -> new PlainFormatter();
-        default -> throw new IllegalArgumentException(
-            "Unsupported format: " + format + ". Supported formats: 'stylish', 'plain'"
-        );
-    };
+        return switch (format.toLowerCase()) {
+            case "stylish" -> new hexlet.code.formatters.StylishFormatter();
+            case "plain" -> new hexlet.code.formatters.PlainFormatter();
+            case "json" -> new hexlet.code.formatters.JsonFormatter();
+            default -> throw new IllegalArgumentException(
+                "Unsupported format: " + format + ". Supported formats: 'stylish', 'plain', 'json'"
+            );
+        };
+    }
 }

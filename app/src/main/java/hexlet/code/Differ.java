@@ -38,7 +38,7 @@ public class Differ {
             
             // Обработка пустых файлов
             if (content == null || content.trim().isEmpty() || 
-                content.trim().equals("{}") || content.trim().equals("---")) {
+                    content.trim().equals("{}") || content.trim().equals("---")) {
                 return java.util.Collections.emptyMap();
             }
             
@@ -101,7 +101,9 @@ public class Differ {
         if (obj1 == null || obj2 == null) {
             return false;
         }
-        return obj1.equals(obj2);
+        
+        // Для вложенных структур используем сравнение через toString
+        return obj1.toString().equals(obj2.toString());
     }
     
     private static Formatter getFormatter(String format) {

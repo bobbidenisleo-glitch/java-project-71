@@ -32,13 +32,13 @@ public class PlainFormatter implements Formatter {
                     result.append("Property '")
                           .append(key)
                           .append("' was added with value: ")
-                            .append(formatValue(newValue));
+                          .append(formatValue(newValue));
                     break;
                     
                 case REMOVED:
                     result.append("Property '")
                           .append(key)
-                            .append("' was removed");
+                          .append("' was removed");
                     break;
                     
                 case CHANGED:
@@ -47,7 +47,7 @@ public class PlainFormatter implements Formatter {
                           .append("' was updated. From ")
                           .append(formatValue(oldValue))
                           .append(" to ")
-                            .append(formatValue(newValue));
+                          .append(formatValue(newValue));
                     break;
                     
                 default:
