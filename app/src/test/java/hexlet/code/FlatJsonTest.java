@@ -3,20 +3,26 @@ package hexlet.code;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class DifferTest {
+public class FlatJsonTest {
     @Test
-    public void testGenerateJson() {
-        // Ваш тест
-    }
-    
-    @Test  
-    public void testGenerateYaml() {
+    public void testFlatJsonComparison() {
         // Ваш тест
     }
     
     @Test
-    public void testGenerateWithDifferentFormats() {
+    public void testEmptyFirstFile() {
+        // Ваш тест
+    }
+    
+    @Test
+    public void testSameFiles() {
+        // Ваш тест
+    }
+    
+    @Test
+    public void testEmptySecondFile() {
         // Ваш тест
     }
 }

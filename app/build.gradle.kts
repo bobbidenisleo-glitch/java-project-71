@@ -1,63 +1,82 @@
 plugins {
     application
-    id("com.github.ben-manes.versions") version "0.51.0"
+    checkstyle
+    jacoco
+    id("org.sonarqube") version "4.4.1.3373"
+}
+
+application {
+    mainClass.set("hexlet.code.App")
 }
 
 group = "hexlet.code"
 version = "1.0-SNAPSHOT"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-application {
-    mainClass = "hexlet.code.App"
-}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // Picocli для CLI
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.1")
     implementation("info.picocli:picocli:4.7.5")
     annotationProcessor("info.picocli:picocli-codegen:4.7.5")
     
-    // Jackson для JSON
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
-    
-    // Jackson для YAML
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0")
-    
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:5.10.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.withType<JavaCompile> {
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+tasks.compileJava {
+    options.release = 17
     options.encoding = "UTF-8"
     options.compilerArgs.add("-Aproject=${project.group}/${project.name}")
 }
 
 tasks.test {
     useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+checkstyle {
+    toolVersion = "10.12.1"
+    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = true
     }
 }
 
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = "hexlet.code.App"
-        attributes["Implementation-Title"] = project.name
-        attributes["Implementation-Version"] = project.version
+sonarqube {
+    properties {
+        property("sonar.projectKey", "java-project-71")
+        property("sonar.projectName", "java-project-71")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.organization", "YOUR_ORG_NAME")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.sourceEncoding", "UTF-8")
     }
 }
 
-tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates") {
-    checkForGradleUpdate = true
-    outputFormatter = "html"
-    outputDir = "build/dependencyUpdates"
-    reportfileName = "report"
+sonarqube {
+    properties {
+        property("sonar.projectKey", "java-project-71")
+        property("sonar.projectName", "java-project-71")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.organization", "YOUR_ORG_NAME")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+    }
 }

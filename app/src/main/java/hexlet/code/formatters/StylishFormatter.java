@@ -4,71 +4,49 @@ import hexlet.code.model.DiffNode;
 import hexlet.code.model.DiffType;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class StylishFormatter implements Formatter {
-    
     @Override
-    public String format(List<DiffNode> diff) {
-        StringBuilder result = new StringBuilder();
-        result.append("{\n");
-        
+    public String format(List<DiffNode> diffNodes) {
+        Map<String, String> lines = new TreeMap<>();
+        buildLines(diffNodes, "", lines);
+        return "{\n" + String.join("\n", lines.values()) + "\n}";
+    }
+
+    private static void buildLines(List<DiffNode> diff, String parentKey, Map<String, String> lines) {
         for (DiffNode node : diff) {
-            switch (node.getType()) {
+            String key = parentKey.isEmpty() ? node.getKey() : parentKey + "." + node.getKey();
+            DiffType type = node.getType();
+            
+            switch (type) {
                 case UNCHANGED:
-                    result.append("    ")
-                          .append(node.getKey()).append(": ")
-                          .append(formatValue(node.getOldValue()))
-                          .append("\n");
+                    lines.put(key, "    " + node.getKey() + ": " + formatValue(node.getOldValue()));
                     break;
-                    
                 case ADDED:
-                    result.append("  + ")
-                          .append(node.getKey()).append(": ")
-                          .append(formatValue(node.getNewValue()))
-                          .append("\n");
+                    lines.put(key, "  + " + node.getKey() + ": " + formatValue(node.getNewValue()));
                     break;
-                    
                 case REMOVED:
-                    result.append("  - ")
-                          .append(node.getKey()).append(": ")
-                          .append(formatValue(node.getOldValue()))
-                          .append("\n");
+                    lines.put(key, "  - " + node.getKey() + ": " + formatValue(node.getOldValue()));
                     break;
-                    
                 case CHANGED:
-                    // Сначала строка для удалённого значения
-                    result.append("  - ")
-                          .append(node.getKey()).append(": ")
-                          .append(formatValue(node.getOldValue()))
-                          .append("\n");
-                    // Затем строка для добавленного значения
-                    result.append("  + ")
-                          .append(node.getKey()).append(": ")
-                          .append(formatValue(node.getNewValue()))
-                          .append("\n");
+                    lines.put(key, "  - " + node.getKey() + ": " + formatValue(node.getOldValue()));
+                    lines.put(key + "_new", "  + " + node.getKey() + ": " + formatValue(node.getNewValue()));
                     break;
-                    
                 default:
-                    // NESTED пока не обрабатываем
-                    break;
+                    throw new IllegalArgumentException("Unknown type: " + type);
             }
         }
-        
-        result.append("}");
-        return result.toString();
     }
-    
-    private String formatValue(Object value) {
+
+    private static String formatValue(Object value) {
         if (value == null) {
             return "null";
         }
-        
-        // Для boolean и чисел выводим как есть
-        if (value instanceof Boolean || value instanceof Number) {
+        if (value instanceof String) {
             return value.toString();
         }
-        
-        // Для строк
-        return value.toString();
+        return String.valueOf(value);
     }
 }

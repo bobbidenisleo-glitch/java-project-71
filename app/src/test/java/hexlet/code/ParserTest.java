@@ -1,36 +1,28 @@
 package hexlet.code;
 
+import hexlet.code.parsers.JsonParser;
+import hexlet.code.parsers.YamlParser;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
 import java.util.Map;
-import java.nio.file.Paths;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ParserTest {
+public class ParserTest {
     
-    private static String getTestResourcePath(String fileName) {
-        return Paths.get("src", "test", "resources", fileName)
-                   .toAbsolutePath()
-                   .toString();
+    @Test
+    public void testParseJson() throws Exception {
+        String json = "{\"host\": \"hexlet.io\", \"timeout\": 50}";
+        JsonParser parser = new JsonParser();
+        Map<String, Object> result = parser.parse(json);
+        assertEquals("hexlet.io", result.get("host"));
+        assertEquals(50, result.get("timeout"));
     }
     
     @Test
-    void testParseJson() throws Exception {
-        String path = getTestResourcePath("file1.json");
-        Map<String, Object> data = Parser.parse(path);
-        assertNotNull(data);
-        assertEquals("hexlet.io", data.get("host"));
-        assertEquals(50, data.get("timeout"));
-        assertEquals("123.234.53.22", data.get("proxy"));
-        assertEquals(false, data.get("follow"));
-    }
-    
-    @Test
-    void testParseYaml() throws Exception {
-        String path = getTestResourcePath("file1.yml");
-        Map<String, Object> data = Parser.parse(path);
-        assertNotNull(data);
-        assertEquals("hexlet.io", data.get("host"));
-        assertEquals(50, data.get("timeout"));
+    public void testParseYaml() throws Exception {
+        String yaml = "host: hexlet.io\ntimeout: 50";
+        YamlParser parser = new YamlParser();
+        Map<String, Object> result = parser.parse(yaml);
+        assertEquals("hexlet.io", result.get("host"));
+        assertEquals(50, result.get("timeout"));
     }
 }

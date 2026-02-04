@@ -1,29 +1,25 @@
-.PHONY: build run test clean installDist run-dist
+.PHONY: build
 
-# Сборка проекта
+install:
+	./gradlew installDist
+
 build:
 	./gradlew build
 
-# Запуск через gradle
-run:
-	./gradlew run
-
-# Запуск тестов
-test:
-	./gradlew test
-
-# Очистка проекта
 clean:
 	./gradlew clean
 
-# Создание дистрибутива
-installDist:
-	./gradlew installDist
+test:
+	./gradlew test
 
-# Запуск исполняемого файла (основная задача)
+checkstyle:
+	./gradlew checkstyleMain checkstyleTest
+
 run-dist:
-	./build/install/app/bin/app
+	./app/build/install/app/bin/app
 
-# Проверка обновлений зависимостей
-check-updates:
-	./gradlew dependencyUpdates
+run:
+	./gradlew run
+
+lint:
+	./gradlew checkstyleMain
