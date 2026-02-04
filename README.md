@@ -1,101 +1,63 @@
-# Diff Calculator (Вычислитель отличий)
+# JSON/YAML Comparator
 
-![Java CI](https://github.com/bobbidenisleo-glitch/java-project-71/actions/workflows/ci.yml/badge.svg)
-![Checkstyle](https://img.shields.io/badge/checkstyle-passing-brightgreen)
-![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
-![Java](https://img.shields.io/badge/Java-21-blue)
-![Gradle](https://img.shields.io/badge/Gradle-8.7-green)
+[![Java CI](https://github.com/bobbidenisleo-glitch/java-project-71/actions/workflows/ci.yml/badge.svg)](https://github.com/bobbidenisleo-glitch/java-project-71/actions/workflows/ci.yml)
 
-Программа для сравнения двух конфигурационных файлов (JSON, YAML).
+## Описание проекта
+Утилита командной строки для сравнения JSON и YAML файлов с выводом различий в трех форматах.
 
-## 📦 Установка
+## Функциональность
+- Сравнение плоских JSON файлов
+- Сравнение YAML файлов
+- Вывод различий в форматах: stylish (по умолчанию), plain, json
+- Автоматическое определение формата файлов
 
+## Использование
+
+### Сборка и тестирование
 ```bash
-git clone https://github.com/bobbidenisleo-glitch/java-project-71.git
-cd java-project-71
-./gradlew installDist
-```
+# Сборка проекта
+make build
 
-## 🚀 Использование
-
-### Базовая команда:
-```bash
-./app/build/install/app/bin/app file1.json file2.json
-```
-
-### Опции:
-```bash
-# Справка
-./app/build/install/app/bin/app -h
-
-# Версия
-./app/build/install/app/bin/app -V
-
-# Указание формата вывода
-./app/build/install/app/bin/app -f stylish file1.json file2.json
-```
-
-## 📊 Пример работы
-
-### Сравнение плоских JSON файлов:
-
-**file1.json:**
-```json
-{
-  "host": "hexlet.io",
-  "timeout": 50,
-  "proxy": "123.234.53.22",
-  "follow": false
-}
-```
-
-**file2.json:**
-```json
-{
-  "timeout": 20,
-  "verbose": true,
-  "host": "hexlet.io"
-}
-```
-
-**Результат:**
-```bash
-$ ./app/build/install/app/bin/app file1.json file2.json
-{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}
-```
-
-## 🎥 Демонстрация
-
-[![asciicast](https://asciinema.org/a/NFIQgLVMu1ymFsqg4ESeOQeXi.svg)](https://asciinema.org/a/NFIQgLVMu1ymFsqg4ESeOQeXi)
-
-## 🛠 Разработка
-
-```bash
-# Запуск тестов
-./gradlew test
+# Запуск всех тестов
+make test
 
 # Проверка стиля кода
-./gradlew checkstyleMain checkstyleTest
-
-# Полная сборка
-./gradlew build
-
-# Отчёт покрытия кода
-./gradlew jacocoTestReport
-
-# Через Makefile
-make test
 make checkstyle
-make build
+
+# Очистка проекта
+make clean
 ```
 
-## 📜 Лицензия
+### Запуск приложения
+```bash
+# Сравнение двух файлов
+java -jar app/build/libs/app.jar file1.json file2.json
 
+# С указанием формата вывода
+java -jar app/build/libs/app.jar file1.yml file2.yml --format plain
+```
+
+## Технологии
+- **Java 17** - язык программирования
+- **JUnit 5** - фреймворк для тестирования
+- **Gradle** - система сборки
+- **Checkstyle** - проверка стиля кода
+- **GitHub Actions** - непрерывная интеграция
+
+## Структура проекта
+```
+java-project-71/
+├── .github/workflows/ci.yml
+├── config/checkstyle/checkstyle.xml
+├── app/build.gradle.kts
+├── Makefile
+└── app/src/
+    ├── main/java/hexlet/code/
+    └── test/java/hexlet/code/
+```
+
+## Автор
+[bobbidenisleo-glitch](https://github.com/bobbidenisleo-glitch)
+
+## Лицензия
 MIT
