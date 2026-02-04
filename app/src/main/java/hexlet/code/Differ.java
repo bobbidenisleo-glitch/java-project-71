@@ -36,6 +36,12 @@ public class Differ {
             String content = Files.readString(Path.of(filePath));
             String extension = getFileExtension(filePath);
             
+            // Обработка пустых файлов
+            if (content == null || content.trim().isEmpty() || 
+                content.trim().equals("{}") || content.trim().equals("---")) {
+                return java.util.Collections.emptyMap();
+            }
+            
             Parser parser = getParser(extension);
             return parser.parse(content);
         } catch (Exception e) {
@@ -59,7 +65,10 @@ public class Differ {
     private static List<DiffNode> compareMaps(Map<String, Object> map1, Map<String, Object> map2) {
         List<DiffNode> result = new ArrayList<>();
         
-        // Все ключи из обоих мапов
+        // Обработка null мапов
+        map1 = map1 != null ? map1 : java.util.Collections.emptyMap();
+        map2 = map2 != null ? map2 : java.util.Collections.emptyMap();
+        
         var allKeys = new TreeSet<String>();
         allKeys.addAll(map1.keySet());
         allKeys.addAll(map2.keySet());
@@ -96,11 +105,12 @@ public class Differ {
     }
     
     private static Formatter getFormatter(String format) {
-        return switch (format) {
+        return switch (format.toLowerCase()) {
             case "stylish" -> new hexlet.code.formatters.StylishFormatter();
             case "plain" -> new hexlet.code.formatters.PlainFormatter();
+            case "json" -> new hexlet.code.formatters.JsonFormatter();
             default -> throw new IllegalArgumentException(
-                "Unsupported format: " + format + ". Supported formats: 'stylish', 'plain'"
+                "Unsupported format: " + format + ". Supported formats: 'stylish', 'plain', 'json'"
             );
         };
     }
