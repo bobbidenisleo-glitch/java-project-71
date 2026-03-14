@@ -3,61 +3,47 @@ package hexlet.code.formatters;
 import hexlet.code.model.DiffNode;
 import hexlet.code.model.DiffType;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PlainFormatter implements Formatter {
-    @Override
-    public String format(List<DiffNode> diffNodes) {
-        if (diffNodes == null || diffNodes.isEmpty()) {
-            return "";
-        }
-        
-        StringBuilder result = new StringBuilder();
-        
-        for (DiffNode node : diffNodes) {
-            String key = node.getKey();
-            DiffType type = node.getType();
-            Object oldValue = node.getOldValue();
-            Object newValue = node.getNewValue();
-            
-            if (type == DiffType.UNCHANGED) {
-                continue;
-            }
-            
-            if (result.length() > 0) {
-                result.append("\n");
-            }
-            
-            switch (type) {
-                case ADDED:
-                    result.append("Property '")
-                          .append(key)
-                          .append("' was added with value: ")
-                            .append(formatValue(newValue));
-                    break;
-                    
-                case REMOVED:
-                    result.append("Property '")
-                          .append(key)
-                            .append("' was removed");
-                    break;
-                    
-                case CHANGED:
-                    result.append("Property '")
-                          .append(key)
-                          .append("' was updated. From ")
-                          .append(formatValue(oldValue))
-                          .append(" to ")
-                            .append(formatValue(newValue));
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
-        
-        return result.toString();
-    }
     
+    @Override
+    public String format(List<DiffNode> diff) throws Exception {
+        return formatInternal(diff, "");
+    }
+
+    private String formatInternal(List<DiffNode> diff, String path) {
+        return diff.stream()
+                .map(node -> formatNode(node, path))
+                .filter(line -> !line.isEmpty())
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String formatNode(DiffNode node, String path) {
+        String key = node.getKey();
+        DiffType type = node.getType();
+        Object oldValue = node.getOldValue();
+        Object newValue = node.getNewValue();
+        
+        String fullPath = path.isEmpty() ? key : path + "." + key;
+
+        switch (type) {
+            case ADDED:
+                return String.format("Property '%s' was added with value: %s",
+                        fullPath, formatValue(newValue));
+            case REMOVED:
+                return String.format("Property '%s' was removed", fullPath);
+            case CHANGED:
+                return String.format("Property '%s' was updated. From %s to %s",
+                        fullPath, formatValue(oldValue), formatValue(newValue));
+            case UNCHANGED:
+                return "";
+            default:
+                return "";
+        }
+    }
+
     private String formatValue(Object value) {
         if (value == null) {
             return "null";
@@ -67,10 +53,10 @@ public class PlainFormatter implements Formatter {
             return "'" + value + "'";
         }
         
-        if (value instanceof java.util.Map || value instanceof Iterable) {
+        if (value instanceof Map || value instanceof List || value.getClass().isArray()) {
             return "[complex value]";
         }
         
-        return String.valueOf(value);
+        return value.toString();
     }
 }

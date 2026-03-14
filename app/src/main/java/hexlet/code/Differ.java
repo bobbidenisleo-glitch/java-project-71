@@ -1,6 +1,8 @@
 package hexlet.code;
 
-import hexlet.code.formatters.Formatter;
+import hexlet.code.formatters.StylishFormatter;
+import hexlet.code.formatters.PlainFormatter;
+import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.model.DiffNode;
 import hexlet.code.parsers.Parser;
 import hexlet.code.parsers.JsonParser;
@@ -17,16 +19,16 @@ import java.util.TreeSet;
 
 public class Differ {
     
-    public static String generate(String filePath1, String filePath2) throws IOException {
+    public static String generate(String filePath1, String filePath2) throws Exception {
         return generate(filePath1, filePath2, "stylish");
     }
     
-    public static String generate(String filePath1, String filePath2, String format) throws IOException {
+    public static String generate(String filePath1, String filePath2, String format) throws Exception {
         Map<String, Object> data1 = parseFile(filePath1);
         Map<String, Object> data2 = parseFile(filePath2);
         
         List<DiffNode> diffNodes = compareMaps(data1, data2);
-        Formatter formatter = getFormatter(format);
+        hexlet.code.formatters.Formatter formatter = getFormatter(format);
         
         return formatter.format(diffNodes);
     }
@@ -106,14 +108,13 @@ public class Differ {
         return obj1.toString().equals(obj2.toString());
     }
     
-    private static Formatter getFormatter(String format) {
+    private static hexlet.code.formatters.Formatter getFormatter(String format) {
         return switch (format.toLowerCase()) {
-            case "stylish" -> new hexlet.code.formatters.StylishFormatter();
-            case "plain" -> new hexlet.code.formatters.PlainFormatter();
-            case "json" -> new hexlet.code.formatters.JsonFormatter();
+            case "stylish" -> new StylishFormatter();
+            case "plain" -> new PlainFormatter();
+            case "json" -> new JsonFormatter();
             default -> throw new IllegalArgumentException(
-                "Unsupported format: " + format + ". Supported formats: 'stylish', 'plain', 'json'"
-            );
+                "Unsupported format: " + format + ". Supported formats: 'stylish', 'plain', 'json'");
         };
     }
 }

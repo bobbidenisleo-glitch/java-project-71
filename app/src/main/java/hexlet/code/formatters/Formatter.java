@@ -4,5 +4,5 @@ import hexlet.code.model.DiffNode;
 import java.util.List;
 
 public interface Formatter {
-    String format(List<DiffNode> diffNodes);
+    String format(List<DiffNode> diff) throws Exception;
 }

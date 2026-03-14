@@ -74,3 +74,33 @@ MIT
   - checked: false
   + checked: true
 }
+## Формат вывода "plain"
+
+Плоский формат предназначен для интеграции с другими системами:
+
+```bash
+./build/install/app/bin/app -f plain file1.json file2.json
+
+Пример вывода:
+text
+
+Property 'chars2' was updated. From [complex value] to false
+Property 'checked' was updated. From false to true
+Property 'default' was updated. From null to [complex value]
+Property 'id' was updated. From 45 to null
+Property 'key1' was removed
+Property 'key2' was added with value: 'value2'
+
+Особенности plain формата:
+
+    Простые значения выводятся как есть (строки в кавычках)
+
+    Составные значения (объекты/массивы) обозначаются как [complex value]
+
+    Для вложенных свойств используется точечная нотация: common.setting1
+
+    Изменения: Property 'key' was updated. From old to new
+
+    Добавления: Property 'key' was added with value: value
+
+    Удаления: Property 'key' was removed
