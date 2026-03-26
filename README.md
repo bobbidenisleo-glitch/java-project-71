@@ -1,3 +1,8 @@
+[![Actions Status](https://github.com/bobbidenisleo-glitch/java-project-71/workflows/hexlet-check/badge.svg)](https://github.com/bobbidenisleo-glitch/java-project-71/actions)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ваш-идентификатор/maintainability)](https://codeclimate.com/github/bobbidenisleo-glitch/java-project-71/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ваш-идентификатор/test_coverage)](https://codeclimate.com/github/bobbidenisleo-glitch/java-project-71/test_coverage)
+
+
 # JSON/YAML Comparator
 
 [![Java CI](https://github.com/bobbidenisleo-glitch/java-project-71/actions/workflows/ci.yml/badge.svg)](https://github.com/bobbidenisleo-glitch/java-project-71/actions/workflows/ci.yml)
