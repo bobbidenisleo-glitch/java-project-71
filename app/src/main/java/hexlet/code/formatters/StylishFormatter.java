@@ -60,10 +60,53 @@ public class StylishFormatter implements Formatter {
             return (String) value;
         }
         
-        if (value instanceof Map || value instanceof List) {
-            return "[complex value]";
+        if (value instanceof List) {
+            List<?> list = (List<?>) value;
+            if (list.isEmpty()) {
+                return "[]";
+            }
+            StringBuilder sb = new StringBuilder("[");
+            for (int i = 0; i < list.size(); i++) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
+                sb.append(formatSimpleValue(list.get(i)));
+            }
+            sb.append("]");
+            return sb.toString();
         }
         
+        if (value instanceof Map) {
+            Map<?, ?> map = (Map<?, ?>) value;
+            if (map.isEmpty()) {
+                return "{}";
+            }
+            StringBuilder sb = new StringBuilder("{");
+            int i = 0;
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
+                sb.append(entry.getKey()).append("=").append(formatSimpleValue(entry.getValue()));
+                i++;
+            }
+            sb.append("}");
+            return sb.toString();
+        }
+        
+        return value.toString();
+    }
+    
+    private String formatSimpleValue(Object value) {
+        if (value == null) {
+            return "null";
+        }
+        if (value instanceof String) {
+            return (String) value;
+        }
+        if (value instanceof List || value instanceof Map) {
+            return "[complex value]";
+        }
         return value.toString();
     }
 }
