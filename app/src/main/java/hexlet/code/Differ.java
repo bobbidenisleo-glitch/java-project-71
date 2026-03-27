@@ -1,5 +1,5 @@
 package hexlet.code;
-
+import hexlet.code.Comparator;
 import hexlet.code.formatters.StylishFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.JsonFormatter;
@@ -8,7 +8,7 @@ import hexlet.code.parsers.Parser;
 import hexlet.code.parsers.JsonParser;
 import hexlet.code.parsers.YamlParser;
 import hexlet.code.model.DiffType;
-
+import hexlet.code.parsers.ParserFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,7 +27,7 @@ public class Differ {
         Map<String, Object> data1 = parseFile(filePath1);
         Map<String, Object> data2 = parseFile(filePath2);
         
-        List<DiffNode> diffNodes = compareMaps(data1, data2);
+        List<DiffNode> diffNodes = Comparator.compare(data1, data2);
         hexlet.code.formatters.Formatter formatter = getFormatter(format);
         
         return formatter.format(diffNodes);
@@ -44,7 +44,7 @@ public class Differ {
                 return java.util.Collections.emptyMap();
             }
             
-            Parser parser = getParser(extension);
+            Parser parser = ParserFactory.getParser(filePath);
             return parser.parse(content);
         } catch (Exception e) {
             throw new IOException("Error parsing file: " + filePath, e);
@@ -56,45 +56,7 @@ public class Differ {
         return dotIndex > 0 ? filePath.substring(dotIndex + 1).toLowerCase() : "";
     }
     
-    private static Parser getParser(String extension) {
-        return switch (extension) {
-            case "json" -> new JsonParser();
-            case "yaml", "yml" -> new YamlParser();
-            default -> throw new IllegalArgumentException("Unsupported file format: " + extension);
-        };
-    }
     
-    private static List<DiffNode> compareMaps(Map<String, Object> map1, Map<String, Object> map2) {
-        List<DiffNode> result = new ArrayList<>();
-        
-        // Обработка null мапов
-        map1 = map1 != null ? map1 : java.util.Collections.emptyMap();
-        map2 = map2 != null ? map2 : java.util.Collections.emptyMap();
-        
-        var allKeys = new TreeSet<String>();
-        allKeys.addAll(map1.keySet());
-        allKeys.addAll(map2.keySet());
-        
-        for (String key : allKeys) {
-            Object value1 = map1.get(key);
-            Object value2 = map2.get(key);
-            
-            DiffType type;
-            if (!map1.containsKey(key)) {
-                type = DiffType.ADDED;
-            } else if (!map2.containsKey(key)) {
-                type = DiffType.REMOVED;
-            } else if (isEqual(value1, value2)) {
-                type = DiffType.UNCHANGED;
-            } else {
-                type = DiffType.CHANGED;
-            }
-            
-            result.add(new DiffNode(key, type, value1, value2));
-        }
-        
-        return result;
-    }
     
     private static boolean isEqual(Object obj1, Object obj2) {
         if (obj1 == null && obj2 == null) {
