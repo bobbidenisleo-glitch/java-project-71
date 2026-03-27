@@ -1,6 +1,5 @@
 [![Actions Status](https://github.com/bobbidenisleo-glitch/java-project-71/workflows/hexlet-check/badge.svg)](https://github.com/bobbidenisleo-glitch/java-project-71/actions)
-[![Maintainability](https://api.codeclimate.com/v1/badges/ваш-идентификатор/maintainability)](https://codeclimate.com/github/bobbidenisleo-glitch/java-project-71/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ваш-идентификатор/test_coverage)](https://codeclimate.com/github/bobbidenisleo-glitch/java-project-71/test_coverage)
+[![Java CI](https://github.com/bobbidenisleo-glitch/java-project-71/actions/workflows/ci.yml/badge.svg)](https://github.com/bobbidenisleo-glitch/java-project-71/actions/workflows/ci.yml)
 
 
 # JSON/YAML Comparator
@@ -85,27 +84,22 @@ MIT
 
 ```bash
 ./build/install/app/bin/app -f plain file1.json file2.json
+```
 
 Пример вывода:
-text
-
+```
 Property 'chars2' was updated. From [complex value] to false
 Property 'checked' was updated. From false to true
 Property 'default' was updated. From null to [complex value]
 Property 'id' was updated. From 45 to null
 Property 'key1' was removed
 Property 'key2' was added with value: 'value2'
+```
 
 Особенности plain формата:
-
-    Простые значения выводятся как есть (строки в кавычках)
-
-    Составные значения (объекты/массивы) обозначаются как [complex value]
-
-    Для вложенных свойств используется точечная нотация: common.setting1
-
-    Изменения: Property 'key' was updated. From old to new
-
-    Добавления: Property 'key' was added with value: value
-
-    Удаления: Property 'key' was removed
+- Простые значения выводятся как есть (строки в кавычках)
+- Составные значения (объекты/массивы) обозначаются как `[complex value]`
+- Для вложенных свойств используется точечная нотация: `common.setting1`
+- Изменения: `Property 'key' was updated. From old to new`
+- Добавления: `Property 'key' was added with value: value`
+- Удаления: `Property 'key' was removed`
