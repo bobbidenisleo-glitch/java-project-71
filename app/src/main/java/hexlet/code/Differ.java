@@ -1,9 +1,6 @@
 package hexlet.code;
 
 import hexlet.code.Comparator;
-import hexlet.code.formatters.StylishFormatter;
-import hexlet.code.formatters.PlainFormatter;
-import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.model.DiffNode;
 import hexlet.code.parsers.Parser;
 import hexlet.code.parsers.ParserFactory;
@@ -23,9 +20,8 @@ public class Differ {
         Map<String, Object> data2 = parseFile(filePath2);
         
         List<DiffNode> diffNodes = Comparator.compare(data1, data2);
-        hexlet.code.formatters.Formatter formatter = getFormatter(format);
         
-        return formatter.format(diffNodes);
+        return Formatter.format(diffNodes, format);
     }
     
     private static Map<String, Object> parseFile(String filePath) throws Exception {
@@ -38,15 +34,5 @@ public class Differ {
         
         Parser parser = ParserFactory.getParser(filePath);
         return parser.parse(content);
-    }
-    
-    private static hexlet.code.formatters.Formatter getFormatter(String format) {
-        return switch (format.toLowerCase()) {
-            case "stylish" -> new StylishFormatter();
-            case "plain" -> new PlainFormatter();
-            case "json" -> new JsonFormatter();
-            default -> throw new IllegalArgumentException(
-                "Unsupported format: " + format);
-        };
     }
 }
