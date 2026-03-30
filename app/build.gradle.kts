@@ -43,7 +43,7 @@ tasks.jacocoTestReport {
 
 checkstyle {
     toolVersion = "10.12.0"
-    configFile = file("config/checkstyle/checkstyle.xml")
+    configFile = file("${project.rootDir.parent}/app/config/checkstyle/checkstyle.xml")
     configProperties["checkstyle.cache.file"] = file("build/checkstyle/cache")
 }
 
