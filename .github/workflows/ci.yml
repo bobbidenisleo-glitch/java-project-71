@@ -20,15 +20,19 @@ jobs:
         distribution: 'temurin'
     
     - name: Grant execute permission for gradlew
+      working-directory: app
       run: chmod +x gradlew
     
     - name: Build with Gradle
+      working-directory: app
       run: ./gradlew build
     
     - name: Run tests
+      working-directory: app
       run: ./gradlew test
     
     - name: Run checkstyle
+      working-directory: app
       run: ./gradlew checkstyleMain checkstyleTest
     
     - name: Upload test results
