@@ -10,10 +10,10 @@ public class PlainFormatter implements Formatter {
     
     @Override
     public String format(List<DiffNode> diff) throws Exception {
-        return formatInternal(diff, "");
+        return formatDiff(diff, "");
     }
 
-    private String formatInternal(List<DiffNode> diff, String path) {
+    private String formatDiff(List<DiffNode> diff, String path) {
         return diff.stream()
                 .map(node -> formatNode(node, path))
                 .filter(line -> !line.isEmpty())
@@ -48,15 +48,12 @@ public class PlainFormatter implements Formatter {
         if (value == null) {
             return "null";
         }
-        
         if (value instanceof String) {
             return "'" + value + "'";
         }
-        
-        if (value instanceof Map || value instanceof List || value.getClass().isArray()) {
+        if (value instanceof Map || value instanceof List) {
             return "[complex value]";
         }
-        
         return value.toString();
     }
 }

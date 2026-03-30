@@ -3,10 +3,6 @@ package hexlet.code.parsers;
 public class ParserFactory {
     
     public static Parser getParser(String filePath) {
-        if (filePath == null || filePath.isEmpty()) {
-            throw new IllegalArgumentException("File path cannot be null or empty");
-        }
-        
         String extension = getFileExtension(filePath).toLowerCase();
         
         switch (extension) {
