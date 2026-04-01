@@ -25,28 +25,22 @@ public class Differ {
     }
     
     private static Map<String, Object> parseFile(String filePath) throws Exception {
-        System.out.println("DEBUG parseFile: " + filePath);
         String content = Files.readString(Path.of(filePath));
         String dataFormat = getDataFormat(filePath);
-        System.out.println("DEBUG dataFormat: " + dataFormat);
         
         if (content == null || content.trim().isEmpty() || 
                 content.trim().equals("{}") || content.trim().equals("---")) {
-            System.out.println("DEBUG: empty content detected");
             return java.util.Collections.emptyMap();
         }
         
         Parser parser = ParserFactory.getParser(dataFormat);
-        System.out.println("DEBUG: parser obtained: " + parser.getClass().getSimpleName());
         return parser.parse(content);
     }
     
     private static String getDataFormat(String filePath) {
         int dotIndex = filePath.lastIndexOf('.');
         if (dotIndex > 0 && dotIndex < filePath.length() - 1) {
-            String format = filePath.substring(dotIndex + 1).toLowerCase();
-            System.out.println("DEBUG getDataFormat: " + format);
-            return format;
+            return filePath.substring(dotIndex + 1).toLowerCase();
         }
         throw new IllegalArgumentException("Cannot determine data format from: " + filePath);
     }
