@@ -43,7 +43,7 @@ public class StylishFormatter implements Formatter {
                           .append(formatValue(oldValue, depth + 1)).append("\n");
                     break;
                 default:
-                    break;
+                    throw new RuntimeException("Unknown status: " + type);
             }
         }
         

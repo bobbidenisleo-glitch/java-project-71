@@ -1,2 +1,1 @@
-rootProject.name = "java-project-71"
-include("app")
+rootProject.name = "app"
