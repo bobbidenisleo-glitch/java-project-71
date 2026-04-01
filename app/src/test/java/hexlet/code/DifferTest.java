@@ -2,13 +2,20 @@ package hexlet.code;
 
 import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DifferTest {
     
     private String getFixturePath(String format, String fileName) {
-        return Paths.get("src", "test", "resources", "fixtures", format, fileName)
+        // Сначала пробуем новую структуру с подпапкой
+        String pathWithSubdir = Paths.get("src", "test", "resources", "fixtures", format, fileName)
                 .toAbsolutePath().toString();
+        if (Files.exists(Paths.get(pathWithSubdir))) {
+            return pathWithSubdir;
+        }
+        // Если нет, пробуем старую структуру (без подпапки)
+        return Paths.get("src", "test", "resources", "fixtures", fileName).toAbsolutePath().toString();
     }
     
     @Test
