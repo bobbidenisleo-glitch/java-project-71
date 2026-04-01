@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DifferTest {
-    
+
     private String getFixturePath(String format, String fileName) {
         // Сначала пробуем новую структуру с подпапкой
         String pathWithSubdir = Paths.get("src", "test", "resources", "fixtures", format, fileName)
@@ -17,7 +17,7 @@ public class DifferTest {
         // Если нет, пробуем старую структуру (без подпапки)
         return Paths.get("src", "test", "resources", "fixtures", fileName).toAbsolutePath().toString();
     }
-    
+
     @Test
     public void testJsonStylish() throws Exception {
         String file1 = getFixturePath("json", "file1.json");
@@ -28,7 +28,7 @@ public class DifferTest {
         assertTrue(result.contains("key3"));
         assertTrue(result.contains("updated"));
     }
-    
+
     @Test
     public void testJsonPlain() throws Exception {
         String file1 = getFixturePath("json", "file1.json");
@@ -38,7 +38,7 @@ public class DifferTest {
         assertTrue(result.contains("Property 'key2' was removed"));
         assertTrue(result.contains("Property 'key3' was added"));
     }
-    
+
     @Test
     public void testJsonJson() throws Exception {
         String file1 = getFixturePath("json", "file1.json");
@@ -51,7 +51,7 @@ public class DifferTest {
         assertTrue(result.contains("key3"));
         assertTrue(result.contains("ADDED"));
     }
-    
+
     @Test
     public void testJsonDefault() throws Exception {
         String file1 = getFixturePath("json", "file1.json");
@@ -61,7 +61,7 @@ public class DifferTest {
         assertTrue(result.contains("key2"));
         assertTrue(result.contains("key3"));
     }
-    
+
     @Test
     public void testYmlStylish() throws Exception {
         String file1 = getFixturePath("yml", "file1.yml");
@@ -72,7 +72,7 @@ public class DifferTest {
         assertTrue(result.contains("verbose: true"));
         assertTrue(result.contains("follow: false"));
     }
-    
+
     @Test
     public void testYmlPlain() throws Exception {
         String file1 = getFixturePath("yml", "file1.yml");
@@ -81,7 +81,7 @@ public class DifferTest {
         assertTrue(result.contains("Property 'timeout' was updated"));
         assertTrue(result.contains("Property 'verbose' was added"));
     }
-    
+
     @Test
     public void testYmlJson() throws Exception {
         String file1 = getFixturePath("yml", "file1.yml");
@@ -92,7 +92,7 @@ public class DifferTest {
         assertTrue(result.contains("verbose"));
         assertTrue(result.contains("ADDED"));
     }
-    
+
     @Test
     public void testYmlDefault() throws Exception {
         String file1 = getFixturePath("yml", "file1.yml");

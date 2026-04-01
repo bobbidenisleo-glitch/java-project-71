@@ -10,18 +10,18 @@ import java.util.TreeSet;
 import java.util.Objects;
 
 public class Comparator {
-    
+
     public static List<DiffNode> compare(Map<String, Object> map1, Map<String, Object> map2) {
         List<DiffNode> result = new ArrayList<>();
-        
+
         TreeSet<String> allKeys = new TreeSet<>();
         allKeys.addAll(map1.keySet());
         allKeys.addAll(map2.keySet());
-        
+
         for (String key : allKeys) {
             Object value1 = map1.get(key);
             Object value2 = map2.get(key);
-            
+
             if (!map2.containsKey(key)) {
                 result.add(new DiffNode(key, DiffType.REMOVED, value1, null));
             } else if (!map1.containsKey(key)) {
@@ -32,7 +32,7 @@ public class Comparator {
                 result.add(new DiffNode(key, DiffType.UNCHANGED, value1, value2));
             }
         }
-        
+
         return result;
     }
 }

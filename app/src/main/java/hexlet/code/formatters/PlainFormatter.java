@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class PlainFormatter implements Formatter {
-    
+public final class PlainFormatter implements Formatter {
+
     @Override
     public String format(List<DiffNode> diff) throws Exception {
         return formatDiff(diff, "");
@@ -25,7 +25,7 @@ public class PlainFormatter implements Formatter {
         DiffType type = node.getType();
         Object oldValue = node.getOldValue();
         Object newValue = node.getNewValue();
-        
+
         String fullPath = path.isEmpty() ? key : path + "." + key;
 
         switch (type) {

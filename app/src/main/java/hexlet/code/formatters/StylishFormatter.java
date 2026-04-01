@@ -5,8 +5,8 @@ import hexlet.code.model.DiffType;
 import java.util.List;
 import java.util.Map;
 
-public class StylishFormatter implements Formatter {
-    
+public final class StylishFormatter implements Formatter {
+
     @Override
     public String format(List<DiffNode> diff) {
         return formatDiff(diff, 0);
@@ -16,7 +16,7 @@ public class StylishFormatter implements Formatter {
         StringBuilder result = new StringBuilder("{\n");
         String indent = "  ".repeat(depth);
         String nextIndent = "  ".repeat(depth + 1);
-        
+
         for (DiffNode node : diff) {
             String key = node.getKey();
             DiffType type = node.getType();
@@ -46,7 +46,7 @@ public class StylishFormatter implements Formatter {
                     throw new RuntimeException("Unknown status: " + type);
             }
         }
-        
+
         result.append(indent).append("}");
         return result.toString();
     }
@@ -55,11 +55,11 @@ public class StylishFormatter implements Formatter {
         if (value == null) {
             return "null";
         }
-        
+
         if (value instanceof String) {
             return (String) value;
         }
-        
+
         if (value instanceof List) {
             List<?> list = (List<?>) value;
             if (list.isEmpty()) {
@@ -75,7 +75,7 @@ public class StylishFormatter implements Formatter {
             sb.append("]");
             return sb.toString();
         }
-        
+
         if (value instanceof Map) {
             Map<?, ?> map = (Map<?, ?>) value;
             if (map.isEmpty()) {
@@ -93,10 +93,10 @@ public class StylishFormatter implements Formatter {
             sb.append("}");
             return sb.toString();
         }
-        
+
         return value.toString();
     }
-    
+
     private String formatSimpleValue(Object value) {
         if (value == null) {
             return "null";
