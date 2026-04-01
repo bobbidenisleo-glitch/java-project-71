@@ -27,8 +27,10 @@ public class Differ {
         String content = Files.readString(Path.of(filePath));
         String dataFormat = getDataFormat(filePath);
 
-        if (content == null || content.trim().isEmpty()  ||
-                content.trim().equals("{}") || content.trim().equals("---")) {
+        if (content == null
+                || content.trim().isEmpty()
+                || content.trim().equals("{}")
+                || content.trim().equals("---")) {
             return java.util.Collections.emptyMap();
         }
 
