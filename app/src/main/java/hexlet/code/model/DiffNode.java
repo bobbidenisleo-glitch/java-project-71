@@ -13,23 +13,8 @@ public final class DiffNode {
         this.newValue = newValue;
     }
 
-    public String getKey()
-    {
-        return key;
-    }
-
-    public DiffType getType()
-    {
-        return type;
-    }
-
-    public Object getOldValue()
-    {
-        return oldValue;
-    }
-
-    public Object getNewValue()
-    {
-        return newValue;
-    }
+    public String getKey() { return key; }
+    public DiffType getType() { return type; }
+    public Object getOldValue() { return oldValue; }
+    public Object getNewValue() { return newValue; }
 }
