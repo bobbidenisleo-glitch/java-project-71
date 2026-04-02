@@ -1,5 +1,6 @@
 package hexlet.code.model;
 
+@SuppressWarnings("checkstyle:LeftCurly")
 public final class DiffNode {
     private String key;
     private DiffType type;
