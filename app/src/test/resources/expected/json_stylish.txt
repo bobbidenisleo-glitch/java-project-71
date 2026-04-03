@@ -1,0 +1,6 @@
+{
+  - key1: value1
+  + key1: updated
+  - key2: 45
+  + key3: new
+}

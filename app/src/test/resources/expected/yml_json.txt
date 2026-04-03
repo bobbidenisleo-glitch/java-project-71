@@ -1,0 +1,1 @@
+[{"key":"follow","type":"UNCHANGED","oldValue":false,"newValue":false},{"key":"host","type":"UNCHANGED","oldValue":"hexlet.io","newValue":"hexlet.io"},{"key":"timeout","type":"CHANGED","oldValue":50,"newValue":20},{"key":"verbose","type":"ADDED","oldValue":null,"newValue":true}]

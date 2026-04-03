@@ -1,0 +1,1 @@
+[{"key":"key1","type":"CHANGED","oldValue":"value1","newValue":"updated"},{"key":"key2","type":"REMOVED","oldValue":45,"newValue":null},{"key":"key3","type":"ADDED","oldValue":null,"newValue":"new"}]
