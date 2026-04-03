@@ -6,3 +6,5 @@ build
 app/build/
 *.class
 app/build/
+GenerateExpected.*
+*.class
