@@ -40,7 +40,7 @@ public final class PlainFormatter implements Formatter {
             case UNCHANGED:
                 return "";
             default:
-                return "";
+                throw new RuntimeException("Unknown type: " + type);
         }
     }
 
